@@ -1,0 +1,18 @@
+# Variables de entorno — NUNCA subir al repositorio
+.env
+.env.local
+.env.production
+
+# Dependencias
+node_modules/
+.next/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Datos de prueba con información sensible
+base-datos/seeds/datos_reales_*
