@@ -699,12 +699,13 @@
     document.getElementById('app-recetas').style.display = 'block';
   }
 
+  // Historial de conversación para mantener contexto con la API
+  const historialMensajes = [];
+
   function enviarRespuesta(btn, texto) {
     agregarBurbuja(texto, 'usuaria');
     document.getElementById('respuestas-rapidas').style.display = 'none';
-    setTimeout(() => {
-      responderYoti(texto);
-    }, 600);
+    llamarAPIYoti(texto);
   }
 
   function enviarMensaje() {
@@ -713,7 +714,7 @@
     if (!texto) return;
     agregarBurbuja(texto, 'usuaria');
     input.value = '';
-    setTimeout(() => responderYoti(texto), 600);
+    llamarAPIYoti(texto);
   }
 
   function manejarEnter(e) {
@@ -732,23 +733,59 @@
     chat.scrollTop = chat.scrollHeight;
   }
 
-  function responderYoti(input) {
-    const txt = input.toLowerCase();
-    let respuesta = '';
+  function mostrarEscribiendo() {
+    const chat = document.getElementById('chat-area');
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja burbuja-yoti';
+    burbuja.id = 'burbuja-escribiendo';
+    burbuja.textContent = 'Yoti está escribiendo...';
+    burbuja.style.opacity = '0.6';
+    burbuja.style.fontStyle = 'italic';
+    chat.appendChild(burbuja);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
-    if (txt.includes('normal') || txt.includes('no sé')) {
-      respuesta = 'Lo que sientes importa, aunque todavía no tengas palabras para explicarlo.\n\nA veces las situaciones difíciles se van instalando poco a poco y es difícil reconocerlas desde dentro.\n\n¿Hay algo concreto que te preocupa o que te está haciendo sentir mal?';
-    } else if (txt.includes('miedo')) {
-      respuesta = 'Gracias por contarme esto. El miedo es una señal importante y merece atención.\n\nSi ahora mismo estás en peligro, lo más importante es que llames al 112 o busques un lugar seguro.\n\nSi tienes un momento, puedes contarme un poco más sobre lo que está pasando.';
-    } else if (txt.includes('ayudar') || txt.includes('cercano') || txt.includes('hermana') || txt.includes('amiga')) {
-      respuesta = 'Que quieras ayudar a alguien cercano dice mucho de ti. 💛\n\nLo más importante cuando acompañas a alguien en esta situación es escuchar sin presionar y no exigir decisiones inmediatas.\n\n¿Me cuentas un poco más sobre lo que observas?';
-    } else if (txt.includes('preparar') || txt.includes('salir')) {
-      respuesta = 'Querer prepararte es un paso muy valiente.\n\nHay cosas que puedes ir organizando poco a poco: documentos importantes, un contacto de confianza, un lugar al que puedas ir.\n\nEl 016 puede orientarte de forma confidencial sobre los pasos concretos. No aparece en la factura del teléfono.';
-    } else {
-      respuesta = 'Te escucho. Gracias por compartir esto conmigo.\n\nSi en algún momento necesitas hablar con alguien especializada, el 016 está disponible de forma gratuita y confidencial. Puedes llamar cuando te sientas segura para hacerlo.';
+  function quitarEscribiendo() {
+    const b = document.getElementById('burbuja-escribiendo');
+    if (b) b.remove();
+  }
+
+  async function llamarAPIYoti(textoUsuaria) {
+    // Añadir mensaje al historial
+    historialMensajes.push({ role: 'user', content: textoUsuaria });
+
+    // Mostrar indicador de escritura
+    mostrarEscribiendo();
+
+    // Bloquear input mientras espera
+    document.getElementById('chat-input').disabled = true;
+
+    try {
+      const response = await fetch('https://yoti-refugio.vercel.app/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: historialMensajes })
+      });
+
+      const data = await response.json();
+      quitarEscribiendo();
+
+      if (data.respuesta) {
+        // Añadir respuesta de Yoti al historial
+        historialMensajes.push({ role: 'assistant', content: data.respuesta });
+        agregarBurbuja(data.respuesta, 'yoti');
+      } else {
+        agregarBurbuja('Ha ocurrido un error. Si necesitas ayuda urgente, llama al 016 o al 112.', 'yoti');
+      }
+
+    } catch (error) {
+      quitarEscribiendo();
+      agregarBurbuja('En este momento no puedo conectarme. Si necesitas ayuda urgente, llama al 016 (gratuito) o al 112.', 'yoti');
     }
 
-    agregarBurbuja(respuesta, 'yoti');
+    // Desbloquear input
+    document.getElementById('chat-input').disabled = false;
+    document.getElementById('chat-input').focus();
   }
 </script>
 </body>
