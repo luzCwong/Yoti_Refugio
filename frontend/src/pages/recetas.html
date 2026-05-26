@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Recetas Favoritas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burdeos: #880E4F;
+    --rose-gold: #D4537E;
+    --crema: #FFF8F0;
+    --dorado: #F5A623;
+    --verde-cta: #2E7D32;
+    --texto: #1a1a1a;
+    --texto-suave: #666;
+    --borde: #e8e0d8;
+    --fondo-tarjeta: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--crema);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* CABECERA */
+  header {
+    background: var(--burdeos);
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(136,14,79,0.3);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-icon {
+    font-size: 22px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+  }
+
+  header p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 1px;
+  }
+
+  /* BOTÓN SALIDA RÁPIDA */
+  .salida-rapida {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+  }
+
+  .salida-rapida:hover {
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* BARRA DE BÚSQUEDA */
+  .buscador {
+    padding: 16px 20px;
+    background: var(--burdeos);
+    padding-top: 0;
+    padding-bottom: 20px;
+  }
+
+  .buscador input {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    outline: none;
+  }
+
+  .buscador input::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* CATEGORÍAS */
+  .categorias {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .categorias::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    background: #fff;
+    border: 1.5px solid var(--borde);
+    color: var(--texto-suave);
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .cat-btn.activa {
+    background: var(--burdeos);
+    border-color: var(--burdeos);
+    color: #fff;
+  }
+
+  /* SECCIÓN DESTACADA — acceso oculto a Yoti */
+  .banner-yoti {
+    margin: 12px 20px 4px;
+    background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
+    border: 1.5px solid #f0d0dc;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+
+  .banner-yoti:hover {
+    box-shadow: 0 4px 12px rgba(212,83,126,0.15);
+  }
+
+  .banner-yoti-icono {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .banner-yoti-texto h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--burdeos);
+    margin-bottom: 2px;
+  }
+
+  .banner-yoti-texto p {
+    font-size: 12px;
+    color: var(--texto-suave);
+    line-height: 1.4;
+  }
+
+  .banner-yoti-flecha {
+    margin-left: auto;
+    color: var(--rose-gold);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* SECCIÓN TÍTULO */
+  .seccion-titulo {
+    padding: 16px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .seccion-titulo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--texto);
+  }
+
+  .ver-todas {
+    font-size: 12px;
+    color: var(--rose-gold);
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  /* GRID DE RECETAS */
+  .grid-recetas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 20px 20px;
+  }
+
+  .tarjeta-receta {
+    background: var(--fondo-tarjeta);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .tarjeta-receta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .tarjeta-imagen {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+
+  .img-placeholder {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+
+  .tarjeta-info {
+    padding: 10px 10px 12px;
+  }
+
+  .tarjeta-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--texto);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .tarjeta-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .tarjeta-meta span {
+    font-size: 10px;
+    color: var(--texto-suave);
+  }
+
+  .punto {
+    width: 3px;
+    height: 3px;
+    background: var(--borde);
+    border-radius: 50%;
+  }
+
+  .dificultad {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .facil { background: #e8f5e9; color: #2e7d32; }
+  .media { background: #fff3e0; color: #e65100; }
+
+  /* PANTALLA YOTI — oculta por defecto */
+  .pantalla-yoti {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 200;
+    flex-direction: column;
+  }
+
+  .pantalla-yoti.activa {
+    display: flex;
+  }
+
+  .yoti-header {
+    background: var(--burdeos);
+    padding: 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .yoti-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .yoti-volver {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  .yoti-salida {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .yoti-bienvenida {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .yoti-avatar {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .yoti-bienvenida-texto h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .yoti-bienvenida-texto p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+  }
+
+  /* CHAT */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--crema);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .burbuja {
+    max-width: 85%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .burbuja-yoti {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    color: var(--texto);
+  }
+
+  .burbuja-usuaria {
+    background: var(--burdeos);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+
+  /* BOTONES DE RESPUESTA RÁPIDA */
+  .respuestas-rapidas {
+    padding: 12px 20px;
+    background: #fff;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .respuesta-btn {
+    background: var(--crema);
+    border: 1.5px solid var(--borde);
+    color: var(--texto);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.3;
+  }
+
+  .respuesta-btn:hover {
+    border-color: var(--rose-gold);
+    background: #fff5f8;
+    color: var(--burdeos);
+  }
+
+  /* INPUT DE TEXTO */
+  .chat-input-area {
+    padding: 12px 20px 16px;
+    background: #fff;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    border: 1.5px solid var(--borde);
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+    max-height: 100px;
+    color: var(--texto);
+    background: var(--crema);
+  }
+
+  .chat-input:focus {
+    border-color: var(--rose-gold);
+  }
+
+  .chat-enviar {
+    width: 40px;
+    height: 40px;
+    background: var(--verde-cta);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .chat-enviar:hover { background: #1b5e20; }
+
+  /* AVISO LEGAL */
+  .aviso-legal {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: #5d4037;
+    line-height: 1.5;
+    margin: 0 0 4px;
+  }
+
+  /* PANTALLA NEUTRA (escape) */
+  .pantalla-neutra {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #f5f5f5;
+    z-index: 300;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .pantalla-neutra.activa {
+    display: flex;
+  }
+
+  .neutra-contenido {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .neutra-contenido h1 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .neutra-contenido p {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .neutra-volver {
+    margin-top: 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ APP DE RECETAS (camuflaje) ============ -->
+<div id="app-recetas">
+  <header>
+    <div class="header-left">
+      <span class="header-icon">🍳</span>
+      <div>
+        <h1>Mis Recetas</h1>
+        <p>Cocina con amor</p>
+      </div>
+    </div>
+    <button class="salida-rapida" onclick="activarSalidaRapida()">✕ Salir</button>
+  </header>
+
+  <div class="buscador">
+    <input type="text" placeholder="🔍  Buscar recetas...">
+  </div>
+
+  <div class="categorias">
+    <button class="cat-btn activa">Todas</button>
+    <button class="cat-btn">Desayunos</button>
+    <button class="cat-btn">Comidas</button>
+    <button class="cat-btn">Cenas</button>
+    <button class="cat-btn">Postres</button>
+    <button class="cat-btn">Ensaladas</button>
+  </div>
+
+  <!-- Acceso oculto a Yoti — parece una sección normal de la app -->
+  <div class="banner-yoti" onclick="abrirYoti()">
+    <div class="banner-yoti-icono">🌿</div>
+    <div class="banner-yoti-texto">
+      <h3>Bienestar en la cocina</h3>
+      <p>Consejos para cocinar con calma y cuidarte</p>
+    </div>
+    <div class="banner-yoti-flecha">›</div>
+  </div>
+
+  <div class="seccion-titulo">
+    <h2>Recetas populares</h2>
+    <span class="ver-todas">Ver todas</span>
+  </div>
+
+  <div class="grid-recetas">
+    <div class="tarjeta-receta">
+      <div class="img-placeholder" style="background:#fff8e1;">🥗</div>
+      <div class="tarjeta-info">
+        <h3>Ensalada mediterránea</h3>
+        <div class="tarjeta-meta">
+          <span>15 min</span>
+          <div class="punto"></div>
+          <span class="dificultad facil">Fácil</span>
+        </div>
+      </div>
+    </div>
+    <div class="tarjeta-receta">
+      <div class="img-placeholder" style="background:#fce4ec;">🍝</div>
+      <div class="tarjeta-info">
+        <h3>Pasta al pesto casero</h3>
+        <div class="tarjeta-meta">
+          <span>25 min</span>
+          <div class="punto"></div>
+          <span class="dificultad facil">Fácil</span>
+        </div>
+      </div>
+    </div>
+    <div class="tarjeta-receta">
+      <div class="img-placeholder" style="background:#e8f5e9;">🥘</div>
+      <div class="tarjeta-info">
+        <h3>Lentejas con verduras</h3>
+        <div class="tarjeta-meta">
+          <span>40 min</span>
+          <div class="punto"></div>
+          <span class="dificultad media">Media</span>
+        </div>
+      </div>
+    </div>
+    <div class="tarjeta-receta">
+      <div class="img-placeholder" style="background:#fff3e0;">🍮</div>
+      <div class="tarjeta-info">
+        <h3>Flan de huevo clásico</h3>
+        <div class="tarjeta-meta">
+          <span>50 min</span>
+          <div class="punto"></div>
+          <span class="dificultad media">Media</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANTALLA YOTI (espacio seguro) ============ -->
+<div id="pantalla-yoti" class="pantalla-yoti">
+  <div class="yoti-header">
+    <div class="yoti-header-top">
+      <button class="yoti-volver" onclick="cerrarYoti()">← Volver</button>
+      <button class="yoti-salida" onclick="activarSalidaRapida()">✕ Salir</button>
+    </div>
+    <div class="yoti-bienvenida">
+      <div class="yoti-avatar">🌸</div>
+      <div class="yoti-bienvenida-texto">
+        <h2>Hola, soy Yoti</h2>
+        <p>Estoy aquí contigo. Este es tu espacio seguro.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chat-area">
+    <div class="aviso-legal">
+      Yoti te orienta y acompaña. En situaciones de peligro inmediato, llama al <strong>112</strong>. Para orientación confidencial, llama al <strong>016</strong> (gratuito, no aparece en factura).
+    </div>
+    <div class="burbuja burbuja-yoti">
+      Hola. Me alegro de que estés aquí. 💛<br><br>
+      No tienes que explicar nada todavía. Puedes empezar por donde quieras, o elegir una de las opciones de abajo.
+    </div>
+  </div>
+
+  <div class="respuestas-rapidas" id="respuestas-rapidas">
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'No sé si lo que vivo es normal')">No sé si lo que vivo es normal</button>
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'Tengo miedo y no sé qué hacer')">Tengo miedo y no sé qué hacer</button>
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'Quiero ayudar a alguien cercano')">Quiero ayudar a alguien cercano</button>
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'Quiero prepararme para salir')">Quiero prepararme para salir</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chat-input" placeholder="Escribe aquí..." rows="1" onkeydown="manejarEnter(event)"></textarea>
+    <button class="chat-enviar" onclick="enviarMensaje()">➤</button>
+  </div>
+</div>
+
+<!-- ============ PANTALLA NEUTRA (escape rápido) ============ -->
+<div id="pantalla-neutra" class="pantalla-neutra">
+  <div class="neutra-contenido">
+    <h1>📅 Agenda del día</h1>
+    <p>Lunes, 26 de mayo</p>
+    <p style="margin-top:16px; font-size:13px; color:#aaa;">Sin eventos programados</p>
+    <button class="neutra-volver" onclick="volverDesdeNeutra()">Volver a recetas</button>
+  </div>
+</div>
+
+<script>
+  function abrirYoti() {
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-yoti').classList.add('activa');
+  }
+
+  function cerrarYoti() {
+    document.getElementById('pantalla-yoti').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
+  function activarSalidaRapida() {
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-yoti').classList.remove('activa');
+    document.getElementById('pantalla-neutra').classList.add('activa');
+  }
+
+  function volverDesdeNeutra() {
+    document.getElementById('pantalla-neutra').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
+  // Historial de conversación para mantener contexto con la API
+  const historialMensajes = [];
+
+  function enviarRespuesta(btn, texto) {
+    agregarBurbuja(texto, 'usuaria');
+    document.getElementById('respuestas-rapidas').style.display = 'none';
+    llamarAPIYoti(texto);
+  }
+
+  function enviarMensaje() {
+    const input = document.getElementById('chat-input');
+    const texto = input.value.trim();
+    if (!texto) return;
+    agregarBurbuja(texto, 'usuaria');
+    input.value = '';
+    llamarAPIYoti(texto);
+  }
+
+  function manejarEnter(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviarMensaje();
+    }
+  }
+
+  function formatearTexto(texto) {
+    return texto
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+  }
+
+  function agregarBurbuja(texto, tipo) {
+    const chat = document.getElementById('chat-area');
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja burbuja-' + tipo;
+    if (tipo === 'yoti') {
+      burbuja.innerHTML = '<p>' + formatearTexto(texto) + '</p>';
+    } else {
+      burbuja.textContent = texto;
+    }
+    chat.appendChild(burbuja);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function mostrarEscribiendo() {
+    const chat = document.getElementById('chat-area');
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja burbuja-yoti';
+    burbuja.id = 'burbuja-escribiendo';
+    burbuja.textContent = 'Yoti está escribiendo...';
+    burbuja.style.opacity = '0.6';
+    burbuja.style.fontStyle = 'italic';
+    chat.appendChild(burbuja);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function quitarEscribiendo() {
+    const b = document.getElementById('burbuja-escribiendo');
+    if (b) b.remove();
+  }
+
+  async function llamarAPIYoti(textoUsuaria) {
+    // Añadir mensaje al historial
+    historialMensajes.push({ role: 'user', content: textoUsuaria });
+
+    // Mostrar indicador de escritura
+    mostrarEscribiendo();
+
+    // Bloquear input mientras espera
+    document.getElementById('chat-input').disabled = true;
+
+    try {
+      const response = await fetch('https://yoti-refugio.vercel.app/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: historialMensajes })
+      });
+
+      const data = await response.json();
+      quitarEscribiendo();
+
+      if (data.respuesta) {
+        // Añadir respuesta de Yoti al historial
+        historialMensajes.push({ role: 'assistant', content: data.respuesta });
+        agregarBurbuja(data.respuesta, 'yoti');
+      } else {
+        agregarBurbuja('Ha ocurrido un error. Si necesitas ayuda urgente, llama al 016 o al 112.', 'yoti');
+      }
+
+    } catch (error) {
+      quitarEscribiendo();
+      agregarBurbuja('En este momento no puedo conectarme. Si necesitas ayuda urgente, llama al 016 (gratuito) o al 112.', 'yoti');
+    }
+
+    // Desbloquear input
+    document.getElementById('chat-input').disabled = false;
+    document.getElementById('chat-input').focus();
+  }
+</script>
+</body>
+</html>
