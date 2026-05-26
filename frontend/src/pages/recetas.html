@@ -139,47 +139,218 @@
     color: #fff;
   }
 
+  /* ANIMACIÓN DE PULSO — banner Yoti */
+  @keyframes pulso-banner {
+    0%   { box-shadow: 0 4px 16px rgba(136,14,79,0.25), 0 0 0 0 rgba(136,14,79,0.4); }
+    70%  { box-shadow: 0 4px 16px rgba(136,14,79,0.25), 0 0 0 10px rgba(136,14,79,0); }
+    100% { box-shadow: 0 4px 16px rgba(136,14,79,0.25), 0 0 0 0 rgba(136,14,79,0); }
+  }
+
+  @keyframes pulso-icono {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.12); }
+  }
+
+  @keyframes parpadeo-flecha {
+    0%, 100% { opacity: 0.7; transform: translateX(0); }
+    50%       { opacity: 1;   transform: translateX(4px); }
+  }
+
   /* SECCIÓN DESTACADA — acceso oculto a Yoti */
   .banner-yoti {
-    margin: 12px 20px 4px;
-    background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
-    border: 1.5px solid #f0d0dc;
-    border-radius: 14px;
-    padding: 14px 16px;
+    margin: 16px 20px 8px;
+    background: linear-gradient(135deg, var(--burdeos) 0%, #b5195e 100%);
+    border-radius: 16px;
+    padding: 18px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     cursor: pointer;
-    transition: box-shadow 0.2s;
+    transition: transform 0.2s;
+    animation: pulso-banner 2.5s ease-in-out infinite;
   }
 
   .banner-yoti:hover {
-    box-shadow: 0 4px 12px rgba(212,83,126,0.15);
+    transform: translateY(-2px);
+    animation: none;
+    box-shadow: 0 8px 24px rgba(136,14,79,0.45);
   }
 
   .banner-yoti-icono {
-    font-size: 28px;
+    font-size: 32px;
     flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulso-icono 2.5s ease-in-out infinite;
   }
 
   .banner-yoti-texto h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    color: var(--burdeos);
-    margin-bottom: 2px;
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 4px;
+    font-weight: 600;
   }
 
   .banner-yoti-texto p {
     font-size: 12px;
-    color: var(--texto-suave);
+    color: rgba(255,255,255,0.8);
     line-height: 1.4;
   }
 
   .banner-yoti-flecha {
     margin-left: auto;
-    color: var(--rose-gold);
-    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+    font-size: 22px;
     flex-shrink: 0;
+    animation: parpadeo-flecha 2.5s ease-in-out infinite;
+  }
+
+  /* PANTALLA DE BIENVENIDA — antes del chat */
+  .pantalla-bienvenida {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 200;
+    flex-direction: column;
+  }
+
+  .pantalla-bienvenida.activa {
+    display: flex;
+  }
+
+  .bienvenida-header {
+    background: var(--burdeos);
+    padding: 20px 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bienvenida-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+  }
+
+  .bienvenida-cuerpo {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 24px;
+    background: var(--crema);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .bienvenida-avatar {
+    width: 72px;
+    height: 72px;
+    background: var(--burdeos);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 4px;
+  }
+
+  .bienvenida-nombre {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--burdeos);
+    margin-bottom: 4px;
+  }
+
+  .bienvenida-subtitulo {
+    text-align: center;
+    font-size: 14px;
+    color: var(--texto-suave);
+    margin-bottom: 8px;
+  }
+
+  .bienvenida-bloque {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    border: 1px solid var(--borde);
+  }
+
+  .bienvenida-bloque h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--burdeos);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .bienvenida-bloque p {
+    font-size: 14px;
+    color: var(--texto);
+    line-height: 1.6;
+  }
+
+  .bienvenida-bloque ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bienvenida-bloque ul li {
+    font-size: 14px;
+    color: var(--texto);
+    line-height: 1.5;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .bienvenida-bloque ul li::before {
+    content: '💛';
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+
+  .bienvenida-aviso {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #5d4037;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .bienvenida-boton {
+    background: var(--verde-cta);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 16px 24px;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+
+  .bienvenida-boton:hover {
+    background: #1b5e20;
   }
 
   /* SECCIÓN TÍTULO */
@@ -284,7 +455,134 @@
   .facil { background: #e8f5e9; color: #2e7d32; }
   .media { background: #fff3e0; color: #e65100; }
 
-  /* PANTALLA YOTI — oculta por defecto */
+  /* PANTALLA RECETA INDIVIDUAL */
+  .pantalla-receta {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 150;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .pantalla-receta.activa {
+    display: flex;
+  }
+
+  .receta-header {
+    background: var(--burdeos);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .receta-volver {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  .receta-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+  }
+
+  .receta-imagen-grande {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+  }
+
+  .receta-cuerpo {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .receta-meta-grande {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .receta-meta-grande span {
+    font-size: 13px;
+    color: var(--texto-suave);
+    background: var(--crema);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--borde);
+  }
+
+  .receta-seccion h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--burdeos);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px solid #f0d0dc;
+  }
+
+  .receta-seccion ul, .receta-seccion ol {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .receta-seccion li {
+    font-size: 14px;
+    color: var(--texto);
+    line-height: 1.5;
+  }
+
+  .receta-yoti-aviso {
+    background: linear-gradient(135deg, #fff5f8 0%, #fff 100%);
+    border: 1.5px solid #f0d0dc;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: box-shadow 0.2s;
+  }
+
+  .receta-yoti-aviso:hover {
+    box-shadow: 0 4px 12px rgba(212,83,126,0.15);
+  }
+
+  .receta-yoti-aviso-texto p:first-child {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--burdeos);
+    margin-bottom: 3px;
+  }
+
+  .receta-yoti-aviso-texto p:last-child {
+    font-size: 12px;
+    color: var(--texto-suave);
+    line-height: 1.4;
+  }
   .pantalla-yoti {
     display: none;
     position: fixed;
@@ -581,7 +879,7 @@
   </div>
 
   <div class="grid-recetas">
-    <div class="tarjeta-receta">
+    <div class="tarjeta-receta" onclick="abrirReceta('ensalada')">
       <div class="img-placeholder" style="background:#fff8e1;">🥗</div>
       <div class="tarjeta-info">
         <h3>Ensalada mediterránea</h3>
@@ -592,7 +890,7 @@
         </div>
       </div>
     </div>
-    <div class="tarjeta-receta">
+    <div class="tarjeta-receta" onclick="abrirReceta('pasta')">
       <div class="img-placeholder" style="background:#fce4ec;">🍝</div>
       <div class="tarjeta-info">
         <h3>Pasta al pesto casero</h3>
@@ -603,7 +901,7 @@
         </div>
       </div>
     </div>
-    <div class="tarjeta-receta">
+    <div class="tarjeta-receta" onclick="abrirReceta('lentejas')">
       <div class="img-placeholder" style="background:#e8f5e9;">🥘</div>
       <div class="tarjeta-info">
         <h3>Lentejas con verduras</h3>
@@ -614,7 +912,7 @@
         </div>
       </div>
     </div>
-    <div class="tarjeta-receta">
+    <div class="tarjeta-receta" onclick="abrirReceta('flan')">
       <div class="img-placeholder" style="background:#fff3e0;">🍮</div>
       <div class="tarjeta-info">
         <h3>Flan de huevo clásico</h3>
@@ -625,6 +923,71 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ============ PANTALLA RECETA INDIVIDUAL ============ -->
+<div id="pantalla-receta" class="pantalla-receta">
+  <div class="receta-header">
+    <button class="receta-volver" onclick="cerrarReceta()">← Volver</button>
+    <h2 id="receta-titulo">Receta</h2>
+    <button class="salida-rapida" onclick="activarSalidaRapida()">✕ Salir</button>
+  </div>
+  <div id="receta-imagen-grande" class="receta-imagen-grande"></div>
+  <div class="receta-cuerpo">
+    <div class="receta-meta-grande" id="receta-meta"></div>
+    <div class="receta-seccion" id="receta-ingredientes"></div>
+    <div class="receta-seccion" id="receta-pasos"></div>
+    <div class="receta-yoti-aviso" onclick="abrirYoti()">
+      <span style="font-size:28px;">🌿</span>
+      <div class="receta-yoti-aviso-texto">
+        <p>¿Necesitas hablar con alguien?</p>
+        <p>Yoti Escucha está en el botón "Bienestar en la cocina". Si quieres hablar con ella, pulsa aquí.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANTALLA BIENVENIDA (intermedia) ============ -->
+<div id="pantalla-bienvenida" class="pantalla-bienvenida">
+  <div class="bienvenida-header">
+    <h1>Tu espacio seguro</h1>
+    <button class="yoti-salida" onclick="activarSalidaRapida()">✕ Salir</button>
+  </div>
+  <div class="bienvenida-cuerpo">
+    <div>
+      <div class="bienvenida-avatar">🌸</div>
+      <div class="bienvenida-nombre">Hola, soy Yoti</div>
+      <div class="bienvenida-subtitulo">Tu acompañante de confianza</div>
+    </div>
+
+    <div class="bienvenida-bloque">
+      <h3>¿Quién soy?</h3>
+      <p>Soy Yoti, una asistente diseñada para escucharte sin juzgarte. Estoy aquí para acompañarte si sientes que algo no está bien en tu vida, si tienes miedo, o si quieres entender mejor lo que estás viviendo.</p>
+    </div>
+
+    <div class="bienvenida-bloque">
+      <h3>¿Cómo puedo ayudarte?</h3>
+      <ul>
+        <li>Escucharte y ayudarte a entender tu situación</li>
+        <li>Orientarte hacia recursos reales de ayuda</li>
+        <li>Acompañarte si quieres prepararte para dar un paso</li>
+        <li>Guiarte si quieres ayudar a alguien cercano</li>
+      </ul>
+    </div>
+
+    <div class="bienvenida-bloque">
+      <h3>¿Cómo funciona?</h3>
+      <p>Puedes escribirme o elegir una opción de las que te propongo. La conversación es privada. Si en cualquier momento necesitas salir rápidamente, pulsa el botón <strong>✕ Salir</strong> que siempre verás en la pantalla.</p>
+    </div>
+
+    <div class="bienvenida-aviso">
+      Yoti te orienta y acompaña, y complementa la atención de profesionales especializadas.<br>
+      En peligro inmediato llama al <strong>112</strong>.<br>
+      Para orientación confidencial: <strong>016</strong> (gratuito, no aparece en factura).
+    </div>
+
+    <button class="bienvenida-boton" onclick="entrarAlChat()">Hablar con Yoti →</button>
   </div>
 </div>
 
@@ -649,8 +1012,9 @@
       Yoti te orienta y acompaña. En situaciones de peligro inmediato, llama al <strong>112</strong>. Para orientación confidencial, llama al <strong>016</strong> (gratuito, no aparece en factura).
     </div>
     <div class="burbuja burbuja-yoti">
-      Hola. Me alegro de que estés aquí. 💛<br><br>
-      No tienes que explicar nada todavía. Puedes empezar por donde quieras, o elegir una de las opciones de abajo.
+      Me alegro de que estés aquí. 💛<br><br>
+      No tienes que tener todo claro para empezar. Puedes contarme lo que sientes, lo que te preocupa, o simplemente elegir una de las opciones de abajo.<br><br>
+      Aquí el tiempo es tuyo.
     </div>
   </div>
 
@@ -678,18 +1042,164 @@
 </div>
 
 <script>
+  // ============ DATOS DE RECETAS ============
+  const recetas = {
+    ensalada: {
+      titulo: 'Ensalada mediterránea',
+      emoji: '🥗',
+      fondo: '#fff8e1',
+      tiempo: '15 min',
+      dificultad: 'Fácil',
+      raciones: '2 personas',
+      ingredientes: [
+        '1 lechuga romana',
+        '200 g de tomates cherry',
+        '1 pepino',
+        '100 g de aceitunas negras',
+        '100 g de queso feta',
+        'Aceite de oliva virgen extra',
+        'Zumo de medio limón',
+        'Sal y orégano al gusto'
+      ],
+      pasos: [
+        'Lava y trocea la lechuga en trozos medianos.',
+        'Corta los tomates cherry por la mitad y el pepino en rodajas.',
+        'Mezcla todos los vegetales en un bol grande.',
+        'Añade las aceitunas y desmenuza el queso feta por encima.',
+        'Aliña con aceite de oliva, zumo de limón, sal y orégano.',
+        'Remueve suavemente y sirve de inmediato.'
+      ]
+    },
+    pasta: {
+      titulo: 'Pasta al pesto casero',
+      emoji: '🍝',
+      fondo: '#fce4ec',
+      tiempo: '25 min',
+      dificultad: 'Fácil',
+      raciones: '2 personas',
+      ingredientes: [
+        '200 g de pasta (espaguetis o fusilli)',
+        '2 puñados de albahaca fresca',
+        '30 g de piñones',
+        '1 diente de ajo',
+        '50 g de parmesano rallado',
+        '6 cucharadas de aceite de oliva',
+        'Sal y pimienta al gusto'
+      ],
+      pasos: [
+        'Cuece la pasta en agua con sal según las instrucciones del paquete.',
+        'Mientras tanto, tritura en un mortero o batidora la albahaca, los piñones y el ajo.',
+        'Añade el parmesano y el aceite poco a poco hasta obtener una salsa homogénea.',
+        'Escurre la pasta reservando un poco del agua de cocción.',
+        'Mezcla la pasta con el pesto, añadiendo agua de cocción si queda muy seco.',
+        'Sirve con parmesano extra y unas hojas de albahaca.'
+      ]
+    },
+    lentejas: {
+      titulo: 'Lentejas con verduras',
+      emoji: '🥘',
+      fondo: '#e8f5e9',
+      tiempo: '40 min',
+      dificultad: 'Media',
+      raciones: '4 personas',
+      ingredientes: [
+        '300 g de lentejas pardinas',
+        '1 cebolla mediana',
+        '2 zanahorias',
+        '1 pimiento verde',
+        '2 dientes de ajo',
+        '1 tomate maduro',
+        '1 cucharadita de pimentón dulce',
+        'Aceite de oliva, sal y laurel'
+      ],
+      pasos: [
+        'Pica la cebolla, el pimiento, las zanahorias y el tomate en trozos pequeños.',
+        'Sofríe la cebolla y el ajo en aceite de oliva a fuego medio durante 5 minutos.',
+        'Añade el pimiento y las zanahorias y sofríe 5 minutos más.',
+        'Incorpora el tomate, el pimentón y las lentejas (previamente enjuagadas).',
+        'Cubre con agua o caldo, añade el laurel y cocina 25 minutos a fuego lento.',
+        'Rectifica de sal y sirve caliente.'
+      ]
+    },
+    flan: {
+      titulo: 'Flan de huevo clásico',
+      emoji: '🍮',
+      fondo: '#fff3e0',
+      tiempo: '50 min',
+      dificultad: 'Media',
+      raciones: '6 personas',
+      ingredientes: [
+        '4 huevos',
+        '500 ml de leche entera',
+        '100 g de azúcar',
+        '1 cucharadita de esencia de vainilla',
+        'Para el caramelo: 100 g de azúcar + 2 cucharadas de agua'
+      ],
+      pasos: [
+        'Prepara el caramelo: calienta el azúcar con el agua en un cazo hasta que tome color dorado.',
+        'Vierte el caramelo en los moldes y déjalo enfriar.',
+        'Bate los huevos con el azúcar hasta integrar bien.',
+        'Calienta la leche con la vainilla sin que llegue a hervir y añádela poco a poco a los huevos.',
+        'Vierte la mezcla sobre el caramelo en los moldes.',
+        'Hornea al baño maría a 170°C durante 35-40 minutos.',
+        'Deja enfriar y desmolda cuando esté a temperatura ambiente.'
+      ]
+    }
+  };
+
+  function abrirReceta(id) {
+    const r = recetas[id];
+    if (!r) return;
+
+    document.getElementById('receta-titulo').textContent = r.titulo;
+    document.getElementById('receta-imagen-grande').textContent = r.emoji;
+    document.getElementById('receta-imagen-grande').style.background = r.fondo;
+
+    document.getElementById('receta-meta').innerHTML = `
+      <span>⏱ ${r.tiempo}</span>
+      <span>👥 ${r.raciones}</span>
+      <span>📊 ${r.dificultad}</span>
+    `;
+
+    document.getElementById('receta-ingredientes').innerHTML = `
+      <h3>Ingredientes</h3>
+      <ul>${r.ingredientes.map(i => `<li>${i}</li>`).join('')}</ul>
+    `;
+
+    document.getElementById('receta-pasos').innerHTML = `
+      <h3>Preparación</h3>
+      <ol>${r.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
+    `;
+
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-receta').classList.add('activa');
+  }
+
+  function cerrarReceta() {
+    document.getElementById('pantalla-receta').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
   function abrirYoti() {
     document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-bienvenida').classList.add('activa');
+  }
+
+  function entrarAlChat() {
+    document.getElementById('pantalla-bienvenida').classList.remove('activa');
     document.getElementById('pantalla-yoti').classList.add('activa');
   }
 
   function cerrarYoti() {
     document.getElementById('pantalla-yoti').classList.remove('activa');
+    document.getElementById('pantalla-bienvenida').classList.remove('activa');
     document.getElementById('app-recetas').style.display = 'block';
   }
 
   function activarSalidaRapida() {
     document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-receta').classList.remove('activa');
+    document.getElementById('pantalla-bienvenida').classList.remove('activa');
     document.getElementById('pantalla-yoti').classList.remove('activa');
     document.getElementById('pantalla-neutra').classList.add('activa');
   }
