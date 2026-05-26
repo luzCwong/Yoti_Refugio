@@ -855,12 +855,12 @@
   </div>
 
   <div class="categorias">
-    <button class="cat-btn activa">Todas</button>
-    <button class="cat-btn">Desayunos</button>
-    <button class="cat-btn">Comidas</button>
-    <button class="cat-btn">Cenas</button>
-    <button class="cat-btn">Postres</button>
-    <button class="cat-btn">Ensaladas</button>
+    <button class="cat-btn activa" onclick="filtrarCategoria(this, 'todas')">Todas</button>
+    <button class="cat-btn" onclick="filtrarCategoria(this, 'desayunos')">Desayunos</button>
+    <button class="cat-btn" onclick="filtrarCategoria(this, 'comidas')">Comidas</button>
+    <button class="cat-btn" onclick="filtrarCategoria(this, 'cenas')">Cenas</button>
+    <button class="cat-btn" onclick="filtrarCategoria(this, 'postres')">Postres</button>
+    <button class="cat-btn" onclick="filtrarCategoria(this, 'ensaladas')">Ensaladas</button>
   </div>
 
   <!-- Acceso oculto a Yoti — parece una sección normal de la app -->
@@ -874,55 +874,24 @@
   </div>
 
   <div class="seccion-titulo">
-    <h2>Recetas populares</h2>
-    <span class="ver-todas">Ver todas</span>
+    <h2 id="titulo-seccion">Recetas populares</h2>
+    <span class="ver-todas" onclick="filtrarCategoria(document.querySelector('[onclick*=todas]'), 'todas')">Ver todas</span>
   </div>
 
-  <div class="grid-recetas">
-    <div class="tarjeta-receta" onclick="abrirReceta('ensalada')">
-      <div class="img-placeholder" style="background:#fff8e1;">🥗</div>
-      <div class="tarjeta-info">
-        <h3>Ensalada mediterránea</h3>
-        <div class="tarjeta-meta">
-          <span>15 min</span>
-          <div class="punto"></div>
-          <span class="dificultad facil">Fácil</span>
-        </div>
-      </div>
-    </div>
-    <div class="tarjeta-receta" onclick="abrirReceta('pasta')">
-      <div class="img-placeholder" style="background:#fce4ec;">🍝</div>
-      <div class="tarjeta-info">
-        <h3>Pasta al pesto casero</h3>
-        <div class="tarjeta-meta">
-          <span>25 min</span>
-          <div class="punto"></div>
-          <span class="dificultad facil">Fácil</span>
-        </div>
-      </div>
-    </div>
-    <div class="tarjeta-receta" onclick="abrirReceta('lentejas')">
-      <div class="img-placeholder" style="background:#e8f5e9;">🥘</div>
-      <div class="tarjeta-info">
-        <h3>Lentejas con verduras</h3>
-        <div class="tarjeta-meta">
-          <span>40 min</span>
-          <div class="punto"></div>
-          <span class="dificultad media">Media</span>
-        </div>
-      </div>
-    </div>
-    <div class="tarjeta-receta" onclick="abrirReceta('flan')">
-      <div class="img-placeholder" style="background:#fff3e0;">🍮</div>
-      <div class="tarjeta-info">
-        <h3>Flan de huevo clásico</h3>
-        <div class="tarjeta-meta">
-          <span>50 min</span>
-          <div class="punto"></div>
-          <span class="dificultad media">Media</span>
-        </div>
-      </div>
-    </div>
+  <div class="grid-recetas" id="grid-recetas">
+  </div>
+</div>
+
+  <!-- FIRMA -->
+  <div style="padding: 20px 20px 32px; text-align: center; border-top: 1px solid #e8e0d8; margin-top: 8px;">
+    <p style="font-family: 'Lato', sans-serif; font-size: 11px; color: #999; line-height: 1.8;">
+      <strong style="color: #880E4F;">Luz C. Wong Naranjo</strong><br>
+      Fundadora · Directora · Yoti Refugio<br>
+      Plataforma IA de acompañamiento a mujeres en situación de violencia de género<br>
+      <a href="https://luzcwong.github.io/Yoti_Refugio/" target="_blank" style="color: #880E4F; text-decoration: none;">🌐 yotirefugio.org</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:ayuda@yotirefugio.org" style="color: #880E4F; text-decoration: none;">✉ ayuda@yotirefugio.org</a>
+    </p>
   </div>
 </div>
 
@@ -1042,110 +1011,49 @@
 </div>
 
 <script>
-  // ============ DATOS DE RECETAS ============
+  // ============ DATOS DE RECETAS CON CATEGORÍAS ============
   const recetas = {
-    ensalada: {
-      titulo: 'Ensalada mediterránea',
-      emoji: '🥗',
-      fondo: '#fff8e1',
-      tiempo: '15 min',
-      dificultad: 'Fácil',
-      raciones: '2 personas',
-      ingredientes: [
-        '1 lechuga romana',
-        '200 g de tomates cherry',
-        '1 pepino',
-        '100 g de aceitunas negras',
-        '100 g de queso feta',
-        'Aceite de oliva virgen extra',
-        'Zumo de medio limón',
-        'Sal y orégano al gusto'
-      ],
-      pasos: [
-        'Lava y trocea la lechuga en trozos medianos.',
-        'Corta los tomates cherry por la mitad y el pepino en rodajas.',
-        'Mezcla todos los vegetales en un bol grande.',
-        'Añade las aceitunas y desmenuza el queso feta por encima.',
-        'Aliña con aceite de oliva, zumo de limón, sal y orégano.',
-        'Remueve suavemente y sirve de inmediato.'
-      ]
-    },
-    pasta: {
-      titulo: 'Pasta al pesto casero',
-      emoji: '🍝',
-      fondo: '#fce4ec',
-      tiempo: '25 min',
-      dificultad: 'Fácil',
-      raciones: '2 personas',
-      ingredientes: [
-        '200 g de pasta (espaguetis o fusilli)',
-        '2 puñados de albahaca fresca',
-        '30 g de piñones',
-        '1 diente de ajo',
-        '50 g de parmesano rallado',
-        '6 cucharadas de aceite de oliva',
-        'Sal y pimienta al gusto'
-      ],
-      pasos: [
-        'Cuece la pasta en agua con sal según las instrucciones del paquete.',
-        'Mientras tanto, tritura en un mortero o batidora la albahaca, los piñones y el ajo.',
-        'Añade el parmesano y el aceite poco a poco hasta obtener una salsa homogénea.',
-        'Escurre la pasta reservando un poco del agua de cocción.',
-        'Mezcla la pasta con el pesto, añadiendo agua de cocción si queda muy seco.',
-        'Sirve con parmesano extra y unas hojas de albahaca.'
-      ]
-    },
-    lentejas: {
-      titulo: 'Lentejas con verduras',
-      emoji: '🥘',
-      fondo: '#e8f5e9',
-      tiempo: '40 min',
-      dificultad: 'Media',
-      raciones: '4 personas',
-      ingredientes: [
-        '300 g de lentejas pardinas',
-        '1 cebolla mediana',
-        '2 zanahorias',
-        '1 pimiento verde',
-        '2 dientes de ajo',
-        '1 tomate maduro',
-        '1 cucharadita de pimentón dulce',
-        'Aceite de oliva, sal y laurel'
-      ],
-      pasos: [
-        'Pica la cebolla, el pimiento, las zanahorias y el tomate en trozos pequeños.',
-        'Sofríe la cebolla y el ajo en aceite de oliva a fuego medio durante 5 minutos.',
-        'Añade el pimiento y las zanahorias y sofríe 5 minutos más.',
-        'Incorpora el tomate, el pimentón y las lentejas (previamente enjuagadas).',
-        'Cubre con agua o caldo, añade el laurel y cocina 25 minutos a fuego lento.',
-        'Rectifica de sal y sirve caliente.'
-      ]
-    },
-    flan: {
-      titulo: 'Flan de huevo clásico',
-      emoji: '🍮',
-      fondo: '#fff3e0',
-      tiempo: '50 min',
-      dificultad: 'Media',
-      raciones: '6 personas',
-      ingredientes: [
-        '4 huevos',
-        '500 ml de leche entera',
-        '100 g de azúcar',
-        '1 cucharadita de esencia de vainilla',
-        'Para el caramelo: 100 g de azúcar + 2 cucharadas de agua'
-      ],
-      pasos: [
-        'Prepara el caramelo: calienta el azúcar con el agua en un cazo hasta que tome color dorado.',
-        'Vierte el caramelo en los moldes y déjalo enfriar.',
-        'Bate los huevos con el azúcar hasta integrar bien.',
-        'Calienta la leche con la vainilla sin que llegue a hervir y añádela poco a poco a los huevos.',
-        'Vierte la mezcla sobre el caramelo en los moldes.',
-        'Hornea al baño maría a 170°C durante 35-40 minutos.',
-        'Deja enfriar y desmolda cuando esté a temperatura ambiente.'
-      ]
-    }
+    ensalada: { titulo: 'Ensalada mediterránea', emoji: '🥗', fondo: '#fff8e1', tiempo: '15 min', dificultad: 'Fácil', raciones: '2 personas', categoria: 'ensaladas', ingredientes: ['1 lechuga romana','200 g de tomates cherry','1 pepino','100 g de aceitunas negras','100 g de queso feta','Aceite de oliva virgen extra','Zumo de medio limón','Sal y orégano al gusto'], pasos: ['Lava y trocea la lechuga en trozos medianos.','Corta los tomates cherry por la mitad y el pepino en rodajas.','Mezcla todos los vegetales en un bol grande.','Añade las aceitunas y desmenuza el queso feta por encima.','Aliña con aceite de oliva, zumo de limón, sal y orégano.','Remueve suavemente y sirve de inmediato.'] },
+    pasta: { titulo: 'Pasta al pesto casero', emoji: '🍝', fondo: '#fce4ec', tiempo: '25 min', dificultad: 'Fácil', raciones: '2 personas', categoria: 'comidas', ingredientes: ['200 g de pasta (espaguetis o fusilli)','2 puñados de albahaca fresca','30 g de piñones','1 diente de ajo','50 g de parmesano rallado','6 cucharadas de aceite de oliva','Sal y pimienta al gusto'], pasos: ['Cuece la pasta en agua con sal según las instrucciones del paquete.','Tritura la albahaca, los piñones y el ajo en un mortero o batidora.','Añade el parmesano y el aceite poco a poco hasta obtener una salsa homogénea.','Escurre la pasta reservando un poco del agua de cocción.','Mezcla la pasta con el pesto añadiendo agua de cocción si queda muy seco.','Sirve con parmesano extra y unas hojas de albahaca.'] },
+    lentejas: { titulo: 'Lentejas con verduras', emoji: '🥘', fondo: '#e8f5e9', tiempo: '40 min', dificultad: 'Media', raciones: '4 personas', categoria: 'comidas', ingredientes: ['300 g de lentejas pardinas','1 cebolla mediana','2 zanahorias','1 pimiento verde','2 dientes de ajo','1 tomate maduro','1 cucharadita de pimentón dulce','Aceite de oliva, sal y laurel'], pasos: ['Pica la cebolla, el pimiento, las zanahorias y el tomate en trozos pequeños.','Sofríe la cebolla y el ajo en aceite de oliva a fuego medio durante 5 minutos.','Añade el pimiento y las zanahorias y sofríe 5 minutos más.','Incorpora el tomate, el pimentón y las lentejas (previamente enjuagadas).','Cubre con agua o caldo, añade el laurel y cocina 25 minutos a fuego lento.','Rectifica de sal y sirve caliente.'] },
+    flan: { titulo: 'Flan de huevo clásico', emoji: '🍮', fondo: '#fff3e0', tiempo: '50 min', dificultad: 'Media', raciones: '6 personas', categoria: 'postres', ingredientes: ['4 huevos','500 ml de leche entera','100 g de azúcar','1 cucharadita de esencia de vainilla','Para el caramelo: 100 g de azúcar + 2 cucharadas de agua'], pasos: ['Prepara el caramelo: calienta el azúcar con el agua hasta que tome color dorado.','Vierte el caramelo en los moldes y déjalo enfriar.','Bate los huevos con el azúcar hasta integrar bien.','Calienta la leche con la vainilla sin que hierva y añádela poco a poco a los huevos.','Vierte la mezcla sobre el caramelo en los moldes.','Hornea al baño maría a 170°C durante 35-40 minutos.','Deja enfriar y desmolda cuando esté a temperatura ambiente.'] },
+    tostadas: { titulo: 'Tostadas con aguacate', emoji: '🥑', fondo: '#f1f8e9', tiempo: '10 min', dificultad: 'Fácil', raciones: '2 personas', categoria: 'desayunos', ingredientes: ['2 rebanadas de pan integral','1 aguacate maduro','1 tomate','Zumo de limón','Sal, pimienta y semillas de sésamo'], pasos: ['Tuesta el pan hasta que esté dorado y crujiente.','Aplasta el aguacate con un tenedor y aliña con limón, sal y pimienta.','Corta el tomate en rodajas finas.','Extiende el aguacate sobre el pan tostado.','Coloca las rodajas de tomate por encima.','Espolvorea con semillas de sésamo y sirve de inmediato.'] },
+    porridge: { titulo: 'Porridge de avena con frutas', emoji: '🥣', fondo: '#fff8e1', tiempo: '10 min', dificultad: 'Fácil', raciones: '1 persona', categoria: 'desayunos', ingredientes: ['80 g de copos de avena','250 ml de leche o bebida vegetal','1 plátano','Un puñado de frutos rojos','Miel o sirope de agave al gusto','Canela al gusto'], pasos: ['Calienta la leche en un cazo a fuego medio.','Añade los copos de avena y remueve continuamente durante 5 minutos.','Cuando tenga textura cremosa, retira del fuego.','Sirve en un bol y añade el plátano en rodajas y los frutos rojos.','Añade miel y canela al gusto.'] },
+    crema: { titulo: 'Crema de calabaza', emoji: '🎃', fondo: '#fff3e0', tiempo: '35 min', dificultad: 'Fácil', raciones: '4 personas', categoria: 'cenas', ingredientes: ['500 g de calabaza','1 cebolla','2 zanahorias','1 diente de ajo','500 ml de caldo de verduras','Aceite de oliva, sal y nuez moscada','Nata líquida para decorar (opcional)'], pasos: ['Pela y trocea la calabaza, la cebolla y las zanahorias.','Sofríe la cebolla y el ajo con aceite de oliva durante 5 minutos.','Añade la calabaza y las zanahorias y sofríe 3 minutos más.','Vierte el caldo de verduras y cocina 20 minutos a fuego medio.','Tritura con una batidora hasta obtener una crema homogénea.','Rectifica de sal, añade nuez moscada y sirve con un hilo de nata.'] },
+    tortilla: { titulo: 'Tortilla francesa con verduras', emoji: '🍳', fondo: '#fffde7', tiempo: '15 min', dificultad: 'Fácil', raciones: '1 persona', categoria: 'cenas', ingredientes: ['2 huevos','1/2 pimiento rojo','1/4 de cebolla','Un puñado de espinacas','Aceite de oliva, sal y pimienta'], pasos: ['Pica el pimiento y la cebolla en trozos pequeños.','Sofríe las verduras en una sartén con un poco de aceite durante 5 minutos.','Añade las espinacas y cocina 2 minutos más hasta que se reduzcan.','Bate los huevos con sal y pimienta y vierte sobre las verduras.','Cocina a fuego medio hasta que cuaje por los bordes.','Dobla la tortilla por la mitad y sirve caliente.'] },
+    brownie: { titulo: 'Brownie de chocolate', emoji: '🍫', fondo: '#efebe9', tiempo: '40 min', dificultad: 'Media', raciones: '8 porciones', categoria: 'postres', ingredientes: ['200 g de chocolate negro','150 g de mantequilla','200 g de azúcar','3 huevos','100 g de harina','Una pizca de sal'], pasos: ['Precalienta el horno a 180°C y engrasa un molde rectangular.','Derrite el chocolate con la mantequilla al baño maría.','Bate el azúcar con los huevos hasta blanquear.','Incorpora el chocolate fundido a la mezcla de huevos.','Añade la harina y la sal y mezcla con movimientos envolventes.','Vierte en el molde y hornea 20-25 minutos.','Deja enfriar antes de cortar en cuadrados.'] },
+    caprese: { titulo: 'Ensalada caprese', emoji: '🍅', fondo: '#fce4ec', tiempo: '10 min', dificultad: 'Fácil', raciones: '2 personas', categoria: 'ensaladas', ingredientes: ['3 tomates maduros grandes','200 g de mozzarella fresca','Hojas de albahaca fresca','Aceite de oliva virgen extra','Sal en escamas y pimienta negra'], pasos: ['Corta los tomates y la mozzarella en rodajas de igual grosor.','Alterna las rodajas de tomate y mozzarella en un plato.','Coloca las hojas de albahaca entre las capas.','Aliña con aceite de oliva, sal en escamas y pimienta.','Sirve de inmediato o deja reposar 5 minutos para que los sabores se integren.'] }
   };
+
+  const categorias = {
+    todas:     { titulo: 'Recetas populares', ids: ['ensalada','pasta','lentejas','flan','tostadas','porridge','crema','tortilla','brownie','caprese'] },
+    desayunos: { titulo: 'Desayunos',         ids: ['tostadas','porridge'] },
+    comidas:   { titulo: 'Comidas',           ids: ['pasta','lentejas'] },
+    cenas:     { titulo: 'Cenas',             ids: ['crema','tortilla'] },
+    postres:   { titulo: 'Postres',           ids: ['flan','brownie'] },
+    ensaladas: { titulo: 'Ensaladas',         ids: ['ensalada','caprese'] }
+  };
+
+  function renderGrid(ids) {
+    const grid = document.getElementById('grid-recetas');
+    grid.innerHTML = ids.map(id => {
+      const r = recetas[id];
+      if (!r) return '';
+      const difClass = r.dificultad === 'Fácil' ? 'facil' : 'media';
+      return '<div class="tarjeta-receta" onclick="abrirReceta(\''+id+'\')"><div class="img-placeholder" style="background:'+r.fondo+';">'+r.emoji+'</div><div class="tarjeta-info"><h3>'+r.titulo+'</h3><div class="tarjeta-meta"><span>'+r.tiempo+'</span><div class="punto"></div><span class="dificultad '+difClass+'">'+r.dificultad+'</span></div></div></div>';
+    }).join('');
+  }
+
+  function filtrarCategoria(btn, cat) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('activa'));
+    btn.classList.add('activa');
+    const cat_data = categorias[cat] || categorias['todas'];
+    document.getElementById('titulo-seccion').textContent = cat_data.titulo;
+    renderGrid(cat_data.ids);
+  }
+
+  // Renderizar grid inicial
+  renderGrid(categorias.todas.ids);
 
   function abrirReceta(id) {
     const r = recetas[id];
