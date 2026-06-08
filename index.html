@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Recetas Favoritas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burdeos: #880E4F;
+    --rose-gold: #D4537E;
+    --crema: #FFF8F0;
+    --dorado: #F5A623;
+    --verde-cta: #2E7D32;
+    --texto: #1a1a1a;
+    --texto-suave: #666;
+    --borde: #e8e0d8;
+    --fondo-tarjeta: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--crema);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* CABECERA */
+  header {
+    background: var(--burdeos);
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(136,14,79,0.3);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-icon {
+    font-size: 22px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+  }
+
+  header p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 1px;
+  }
+
+  /* BOTÓN SALIDA RÁPIDA */
+  .salida-rapida {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+  }
+
+  .salida-rapida:hover {
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* BARRA DE BÚSQUEDA */
+  .buscador {
+    padding: 16px 20px;
+    background: var(--burdeos);
+    padding-top: 0;
+    padding-bottom: 20px;
+  }
+
+  .buscador input {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    outline: none;
+  }
+
+  .buscador input::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* CATEGORÍAS */
+  .categorias {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .categorias::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    background: #fff;
+    border: 1.5px solid var(--borde);
+    color: var(--texto-suave);
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .cat-btn.activa {
+    background: var(--burdeos);
+    border-color: var(--burdeos);
+    color: #fff;
+  }
+
+  /* SECCIÓN DESTACADA — acceso oculto a Yoti */
+  .banner-yoti {
+    margin: 16px 20px 8px;
+    background: linear-gradient(135deg, var(--burdeos) 0%, #b5195f 60%, #c62a72 100%);
+    border-radius: 16px;
+    padding: 18px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(136,14,79,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  /* Patrón decorativo de fondo */
+  .banner-yoti::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .banner-yoti::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .banner-yoti:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 12px rgba(136,14,79,0.3);
+  }
+
+  /* Punto de pulso — señal visual sutil de "activo" */
+  .banner-yoti-pulso {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 8px;
+    height: 8px;
+    background: #F5A623;
+    border-radius: 50%;
+    animation: pulso 2s ease-in-out infinite;
+  }
+
+  @keyframes pulso {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .banner-yoti-icono {
+    font-size: 32px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+  }
+
+  .banner-yoti-texto h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: #ffffff;
+    margin-bottom: 3px;
+    font-weight: 600;
+  }
+
+  .banner-yoti-texto p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.80);
+    line-height: 1.4;
+  }
+
+  .banner-yoti-flecha {
+    margin-left: auto;
+    color: rgba(255,255,255,0.75);
+    font-size: 20px;
+    flex-shrink: 0;
+    padding-right: 4px;
+  }
+
+  /* SECCIÓN TÍTULO */
+  .seccion-titulo {
+    padding: 16px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .seccion-titulo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--texto);
+  }
+
+  .ver-todas {
+    font-size: 12px;
+    color: var(--rose-gold);
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  /* GRID DE RECETAS */
+  .grid-recetas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 20px 20px;
+  }
+
+  .tarjeta-receta {
+    background: var(--fondo-tarjeta);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .tarjeta-receta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .tarjeta-imagen {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+
+  .img-placeholder {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+
+  .tarjeta-info {
+    padding: 10px 10px 12px;
+  }
+
+  .tarjeta-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--texto);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .tarjeta-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .tarjeta-meta span {
+    font-size: 10px;
+    color: var(--texto-suave);
+  }
+
+  .punto {
+    width: 3px;
+    height: 3px;
+    background: var(--borde);
+    border-radius: 50%;
+  }
+
+  .dificultad {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .facil { background: #e8f5e9; color: #2e7d32; }
+  .media { background: #fff3e0; color: #e65100; }
+
+  /* PANTALLA YOTI — oculta por defecto */
+  .pantalla-yoti {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 200;
+    flex-direction: column;
+  }
+
+  .pantalla-yoti.activa {
+    display: flex;
+  }
+
+  .yoti-header {
+    background: var(--burdeos);
+    padding: 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .yoti-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .yoti-volver {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  .yoti-salida {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .yoti-bienvenida {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .yoti-avatar {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .yoti-bienvenida-texto h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .yoti-bienvenida-texto p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+  }
+
+  /* CHAT */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--crema);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .burbuja {
+    max-width: 85%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .burbuja-yoti {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    color: var(--texto);
+  }
+
+  .burbuja-usuaria {
+    background: var(--burdeos);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+
+  /* BOTONES DE RESPUESTA RÁPIDA */
+  .respuestas-rapidas {
+    padding: 12px 20px;
+    background: #fff;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .respuesta-btn {
+    background: var(--crema);
+    border: 1.5px solid var(--borde);
+    color: var(--texto);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.3;
+  }
+
+  .respuesta-btn:hover {
+    border-color: var(--rose-gold);
+    background: #fff5f8;
+    color: var(--burdeos);
+  }
+
+  /* INPUT DE TEXTO */
+  .chat-input-area {
+    padding: 12px 20px 16px;
+    background: #fff;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    border: 1.5px solid var(--borde);
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+    max-height: 100px;
+    color: var(--texto);
+    background: var(--crema);
+  }
+
+  .chat-input:focus {
+    border-color: var(--rose-gold);
+  }
+
+  .chat-enviar {
+    width: 40px;
+    height: 40px;
+    background: var(--verde-cta);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .chat-enviar:hover { background: #1b5e20; }
+
+  /* AVISO LEGAL con 112 integrado */
+  .aviso-legal {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: #5d4037;
+    line-height: 1.6;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .aviso-legal-texto { flex: 1; }
+
+  .btn-112 {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #C62828;
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 8px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    animation: blink-112 2s ease-in-out infinite;
+  }
+
+  @keyframes blink-112 {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(198,40,40,0); }
+    50%       { opacity: 0.82; box-shadow: 0 0 0 4px rgba(198,40,40,0.18); }
+  }
+
+  /* BOTÓN FLOTANTE VOLVER — visible siempre en la parte inferior del chat */
+  .btn-flotante-volver {
+    position: sticky;
+    bottom: 0;
+    background: rgba(255,255,255,0.95);
+    border-top: 1px solid var(--borde);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-flotante-volver button {
+    background: #fff;
+    border: 1.5px solid var(--burdeos);
+    color: var(--burdeos);
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 28px;
+    border-radius: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-flotante-volver button:active {
+    background: var(--burdeos);
+    color: #fff;
+  }
+
+  /* PANTALLA DETALLE RECETA */
+  .pantalla-detalle {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--crema);
+    z-index: 200;
+    flex-direction: column;
+    overflow-y: auto;
+    font-family: 'Lato', sans-serif;
+  }
+  .pantalla-detalle.activa { display: flex; }
+
+  .det-header {
+    background: var(--burdeos);
+    padding: 16px 20px 20px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .det-header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .det-volver {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-family: 'Lato', sans-serif; font-size: 12px;
+    padding: 5px 12px; border-radius: 20px; cursor: pointer;
+  }
+  .det-emoji-grande { font-size: 40px; display: block; margin-bottom: 6px; }
+  .det-nombre { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; font-weight: 600; line-height: 1.2; }
+  .det-meta { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+  .det-body { padding: 20px; flex: 1; }
+
+  .det-seccion-titulo {
+    font-family: 'Playfair Display', serif; font-size: 15px;
+    color: var(--burdeos); margin-bottom: 10px; margin-top: 20px;
+  }
+  .det-seccion-titulo:first-child { margin-top: 0; }
+
+  .det-lista {
+    list-style: none; padding: 0;
+    background: #fff; border-radius: 12px; border: 1px solid var(--borde);
+    overflow: hidden;
+  }
+  .det-lista li {
+    padding: 10px 14px; font-size: 13px; color: var(--texto);
+    border-bottom: 1px solid var(--borde); line-height: 1.5;
+  }
+  .det-lista li:last-child { border-bottom: none; }
+  .det-lista-pasos li { display: flex; gap: 10px; align-items: flex-start; }
+  .det-lista-pasos b { color: var(--burdeos); flex-shrink: 0; min-width: 18px; }
+
+  /* PANTALLA NEUTRA — Calendario estático */
+  .pantalla-neutra {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #f7f7f7;
+    z-index: 300;
+    flex-direction: column;
+    font-family: 'Lato', sans-serif;
+    overflow-y: auto;
+  }
+  .pantalla-neutra.activa { display: flex; }
+
+  .cal-header {
+    background: #fff;
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cal-header-titulo { font-size: 16px; font-weight: 700; color: #222; }
+  .cal-header-sub { font-size: 11px; color: #999; margin-top: 1px; }
+
+  .cal-wrap { padding: 16px 16px 0; }
+
+  .cal-mes-titulo {
+    font-size: 13px; font-weight: 700; color: #444;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 3px; margin-bottom: 16px;
+  }
+
+  .cal-dia-nombre {
+    font-size: 10px; font-weight: 700; color: #aaa;
+    text-align: center; padding: 4px 0; text-transform: uppercase;
+  }
+
+  .cal-dia {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #333; border-radius: 8px; background: #fff;
+    position: relative;
+  }
+  .cal-dia.vacio { background: transparent; }
+  .cal-dia.hoy { background: #333; color: #fff; font-weight: 700; }
+  .cal-dia.festivo { background: #fce4ec; color: #880E4F; font-weight: 700; }
+  .cal-dia.festivo::after {
+    content: ''; position: absolute; bottom: 3px; left: 50%;
+    transform: translateX(-50%); width: 4px; height: 4px;
+    background: #880E4F; border-radius: 50%;
+  }
+
+  .cal-leyenda {
+    padding: 0 16px 10px; display: flex; gap: 16px; align-items: center;
+  }
+  .cal-leyenda-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #888; }
+  .cal-dot-festivo { width: 10px; height: 10px; background: #fce4ec; border: 1px solid #880E4F; border-radius: 3px; }
+  .cal-dot-hoy { width: 10px; height: 10px; background: #333; border-radius: 3px; }
+
+  .cal-festivos-lista {
+    margin: 0 16px 16px; background: #fff;
+    border-radius: 10px; border: 1px solid #eee; overflow: hidden;
+  }
+  .cal-festivo-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; border-bottom: 1px solid #f5f5f5; font-size: 11px;
+  }
+  .cal-festivo-item:last-child { border-bottom: none; }
+  .cal-festivo-fecha { font-weight: 700; color: #880E4F; min-width: 28px; font-size: 12px; }
+  .cal-festivo-nombre { color: #555; }
+
+  .neutra-volver {
+    margin: 0 16px 20px; background: #333; color: #fff;
+    border: none; padding: 12px; border-radius: 10px;
+    font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer; width: calc(100% - 32px);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ APP DE RECETAS (camuflaje) ============ -->
+<div id="app-recetas">
+  <header>
+    <div class="header-left">
+      <span class="header-icon">🍳</span>
+      <div>
+        <h1>Mis Recetas</h1>
+        <p>Cocina con amor</p>
+      </div>
+    </div>
+    <button class="salida-rapida" onclick="activarSalidaRapida()">✕ Salir</button>
+  </header>
+
+  <div class="buscador">
+    <input type="text" placeholder="🔍  Buscar recetas...">
+  </div>
+
+  <div class="categorias">
+    <button class="cat-btn activa" onclick="filtrarCategoria('todas', this)">Todas</button>
+    <button class="cat-btn" onclick="filtrarCategoria('desayuno', this)">Desayunos</button>
+    <button class="cat-btn" onclick="filtrarCategoria('comida', this)">Comidas</button>
+    <button class="cat-btn" onclick="filtrarCategoria('cena', this)">Cenas</button>
+    <button class="cat-btn" onclick="filtrarCategoria('postre', this)">Postres</button>
+    <button class="cat-btn" onclick="filtrarCategoria('ensalada', this)">Ensaladas</button>
+  </div>
+
+  <!-- Acceso oculto a Yoti — parece una sección destacada de la app -->
+  <div class="banner-yoti" onclick="abrirYoti()">
+    <div class="banner-yoti-pulso"></div>
+    <div class="banner-yoti-icono">🌿</div>
+    <div class="banner-yoti-texto">
+      <h3>Bienestar en la cocina</h3>
+      <p>Consejos para cocinar con calma y cuidarte</p>
+    </div>
+    <div class="banner-yoti-flecha">›</div>
+  </div>
+
+  <div class="seccion-titulo">
+    <h2>Recetas populares</h2>
+    <span class="ver-todas">Ver todas</span>
+  </div>
+
+  <div class="grid-recetas" id="grid-recetas">
+
+    <div class="tarjeta-receta" data-cat="desayuno" onclick="abrirReceta('tostadas')">
+      <div class="img-placeholder" style="background:#fff8e1;">🥞</div>
+      <div class="tarjeta-info"><h3>Tostadas con tomate y aceite</h3>
+        <div class="tarjeta-meta"><span>5 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="desayuno" onclick="abrirReceta('batido')">
+      <div class="img-placeholder" style="background:#e3f2fd;">🍌</div>
+      <div class="tarjeta-info"><h3>Batido de plátano y avena</h3>
+        <div class="tarjeta-meta"><span>5 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="comida" onclick="abrirReceta('pollo')">
+      <div class="img-placeholder" style="background:#e8f5e9;">🍗</div>
+      <div class="tarjeta-info"><h3>Pollo al horno con limón</h3>
+        <div class="tarjeta-meta"><span>45 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="comida" onclick="abrirReceta('lentejas')">
+      <div class="img-placeholder" style="background:#fce4ec;">🥘</div>
+      <div class="tarjeta-info"><h3>Lentejas con verduras</h3>
+        <div class="tarjeta-meta"><span>40 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="comida" onclick="abrirReceta('pasta')">
+      <div class="img-placeholder" style="background:#fff3e0;">🍝</div>
+      <div class="tarjeta-info"><h3>Pasta al pesto casero</h3>
+        <div class="tarjeta-meta"><span>25 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="cena" onclick="abrirReceta('tortilla')">
+      <div class="img-placeholder" style="background:#f3e5f5;">🍳</div>
+      <div class="tarjeta-info"><h3>Tortilla española</h3>
+        <div class="tarjeta-meta"><span>30 min</span><div class="punto"></div><span class="dificultad media">Media</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="cena" onclick="abrirReceta('merluza')">
+      <div class="img-placeholder" style="background:#e8f5e9;">🐟</div>
+      <div class="tarjeta-info"><h3>Merluza a la plancha</h3>
+        <div class="tarjeta-meta"><span>15 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="ensalada" onclick="abrirReceta('ensalada-med')">
+      <div class="img-placeholder" style="background:#f1f8e9;">🥗</div>
+      <div class="tarjeta-info"><h3>Ensalada mediterránea</h3>
+        <div class="tarjeta-meta"><span>15 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="ensalada" onclick="abrirReceta('ensalada-garb')">
+      <div class="img-placeholder" style="background:#fff8e1;">🥑</div>
+      <div class="tarjeta-info"><h3>Ensalada de garbanzos y aguacate</h3>
+        <div class="tarjeta-meta"><span>10 min</span><div class="punto"></div><span class="dificultad facil">Fácil</span></div>
+      </div>
+    </div>
+
+    <div class="tarjeta-receta" data-cat="postre" onclick="abrirReceta('flan')">
+      <div class="img-placeholder" style="background:#fce4ec;">🍮</div>
+      <div class="tarjeta-info"><h3>Flan de huevo clásico</h3>
+        <div class="tarjeta-meta"><span>50 min</span><div class="punto"></div><span class="dificultad media">Media</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ PANTALLA YOTI (espacio seguro) ============ -->
+<div id="pantalla-yoti" class="pantalla-yoti">
+  <div class="yoti-header">
+    <div class="yoti-header-top">
+      <div></div>
+      <button class="yoti-salida" onclick="activarSalidaRapida()">✕ Salir</button>
+    </div>
+    <div class="yoti-bienvenida">
+      <div class="yoti-avatar">🌸</div>
+      <div class="yoti-bienvenida-texto">
+        <h2>Hola, soy Yoti</h2>
+        <p>Estoy aquí contigo. Este es tu espacio seguro.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chat-area">
+    <div class="aviso-legal">
+      <div class="aviso-legal-texto">
+        Yoti te orienta y acompaña. Este es tu espacio seguro.
+      </div>
+      <a href="tel:112" class="btn-112">📞 112</a>
+    </div>
+    <div style="background:#e8f4fd;border:1px solid #b3d9f2;border-radius:8px;padding:9px 12px;font-size:11px;color:#1a5276;line-height:1.5;margin:0 0 4px;">
+      🔧 <strong>Versión demo</strong> — Este chat muestra el funcionamiento básico de Yoti. En la versión real, Yoti responderá con inteligencia artificial adaptada a cada situación.
+    </div>
+    <div class="burbuja burbuja-yoti">
+      Hola. Me alegro de que estés aquí. 💛<br><br>
+      No tienes que explicar nada todavía. Puedes empezar por donde quieras, o elegir una de las opciones de abajo.
+    </div>
+  </div>
+
+  <div class="respuestas-rapidas" id="respuestas-rapidas">
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'No sé si lo que vivo es normal')">No sé si lo que vivo es normal</button>
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'Tengo miedo y no sé qué hacer')">Tengo miedo y no sé qué hacer</button>
+    <button class="respuesta-btn" onclick="enviarRespuesta(this, 'Quiero prepararme para salir')">Quiero prepararme para salir</button>
+  </div>
+
+  <div class="btn-flotante-volver">
+    <button onclick="cerrarYoti()">← Volver a recetas</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chat-input" placeholder="Escribe aquí..." rows="1" onkeydown="manejarEnter(event)"></textarea>
+    <button class="chat-enviar" onclick="enviarMensaje()">➤</button>
+  </div>
+</div>
+
+<!-- ============ PANTALLA DETALLE RECETA ============ -->
+<div id="pantalla-detalle" class="pantalla-detalle">
+  <div class="det-header">
+    <div class="det-header-top">
+      <button class="det-volver" onclick="cerrarDetalle()">← Volver</button>
+      <button class="yoti-salida" onclick="activarSalidaRapida()">✕ Salir</button>
+    </div>
+    <span class="det-emoji-grande" id="det-emoji">🍽️</span>
+    <div class="det-nombre" id="det-nombre"></div>
+    <div class="det-meta" id="det-meta"></div>
+  </div>
+  <div class="det-body">
+    <div class="det-seccion-titulo">Ingredientes</div>
+    <ul class="det-lista" id="det-ingredientes"></ul>
+    <div class="det-seccion-titulo">Preparación</div>
+    <ul class="det-lista det-lista-pasos" id="det-pasos"></ul>
+  </div>
+</div>
+
+<!-- ============ PANTALLA NEUTRA — Calendario estático ============ -->
+<div id="pantalla-neutra" class="pantalla-neutra">
+
+  <div class="cal-header">
+    <div>
+      <div class="cal-header-titulo" id="cal-titulo">Junio 2026</div>
+      <div class="cal-header-sub">Festivos nacionales</div>
+    </div>
+    <span style="font-size:20px;">📅</span>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-grid" id="cal-grid">
+      <!-- generado por JS -->
+    </div>
+  </div>
+
+  <div class="cal-leyenda">
+    <div class="cal-leyenda-item"><div class="cal-dot-hoy"></div> Hoy</div>
+    <div class="cal-leyenda-item"><div class="cal-dot-festivo"></div> Festivo nacional</div>
+  </div>
+
+  <div class="cal-festivos-lista" id="cal-festivos-lista">
+    <!-- generado por JS -->
+  </div>
+
+  <button class="neutra-volver" onclick="volverDesdeNeutra()">← Volver a mis recetas</button>
+
+</div>
+
+<script>
+  // ── CALENDARIO ESTÁTICO ────────────────────────────────────────────────
+  const FESTIVOS = {
+    // Festivos nacionales España 2026
+    '2026-01-01': 'Año Nuevo',
+    '2026-01-06': 'Reyes Magos',
+    '2026-04-02': 'Jueves Santo',
+    '2026-04-03': 'Viernes Santo',
+    '2026-05-01': 'Día del Trabajo',
+    '2026-05-15': 'San Isidro (Madrid)',
+    '2026-08-15': 'Asunción de la Virgen',
+    '2026-10-12': 'Fiesta Nacional de España',
+    '2026-11-01': 'Todos los Santos',
+    '2026-11-09': 'Almudena (Madrid)',
+    '2026-12-06': 'Día de la Constitución',
+    '2026-12-08': 'Inmaculada Concepción',
+    '2026-12-25': 'Navidad',
+  };
+
+  const DIAS_SEMANA = ['L','M','X','J','V','S','D'];
+  const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  function renderCalendario() {
+    const hoy = new Date();
+    const anyo = hoy.getFullYear();
+    const mes  = hoy.getMonth(); // 0-based
+    const diaHoy = hoy.getDate();
+
+    // Título
+    document.getElementById('cal-titulo').textContent =
+      MESES[mes] + ' ' + anyo;
+
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+
+    // Cabecera días
+    DIAS_SEMANA.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dia-nombre';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    // Primer día del mes (lunes = 0)
+    const primerDia = new Date(anyo, mes, 1).getDay();
+    const offset = primerDia === 0 ? 6 : primerDia - 1;
+    for (let i = 0; i < offset; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-dia vacio';
+      grid.appendChild(el);
+    }
+
+    // Días del mes
+    const diasEnMes = new Date(anyo, mes + 1, 0).getDate();
+    for (let d = 1; d <= diasEnMes; d++) {
+      const key = `${anyo}-${pad(mes+1)}-${pad(d)}`;
+      const esFestivo = !!FESTIVOS[key];
+      const esHoy = d === diaHoy;
+      const el = document.createElement('div');
+      el.className = 'cal-dia' +
+        (esHoy ? ' hoy' : '') +
+        (esFestivo && !esHoy ? ' festivo' : '');
+      el.textContent = d;
+      grid.appendChild(el);
+    }
+
+    // Lista de festivos del mes
+    const lista = document.getElementById('cal-festivos-lista');
+    lista.innerHTML = '';
+    let hayFestivos = false;
+    for (let d = 1; d <= diasEnMes; d++) {
+      const key = `${anyo}-${pad(mes+1)}-${pad(d)}`;
+      if (FESTIVOS[key]) {
+        hayFestivos = true;
+        const item = document.createElement('div');
+        item.className = 'cal-festivo-item';
+        item.innerHTML =
+          `<span class="cal-festivo-fecha">${d}</span>` +
+          `<span class="cal-festivo-nombre">${FESTIVOS[key]}</span>`;
+        lista.appendChild(item);
+      }
+    }
+    if (!hayFestivos) {
+      const item = document.createElement('div');
+      item.className = 'cal-festivo-item';
+      item.innerHTML = '<span class="cal-festivo-nombre" style="color:#bbb">Sin festivos nacionales este mes</span>';
+      lista.appendChild(item);
+    }
+  }
+
+  // ── FILTRO CATEGORÍAS ─────────────────────────────────────────────────
+  function filtrarCategoria(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('activa'));
+    btn.classList.add('activa');
+    document.querySelectorAll('.tarjeta-receta').forEach(t => {
+      t.style.display = (cat === 'todas' || t.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+
+  // ── DATOS RECETAS ────────────────────────────────────────────────────
+  const RECETAS = {
+    'tostadas':      { nombre:'Tostadas con tomate y aceite', emoji:'🥞', tiempo:'5 min', dificultad:'Fácil', raciones:'2', ingredientes:['2 rebanadas de pan de pueblo','1 tomate maduro','Aceite de oliva virgen extra','Sal al gusto'], pasos:['Tuesta el pan hasta que quede dorado.','Parte el tomate por la mitad y frótalo sobre el pan.','Añade un chorrito de aceite de oliva.','Termina con una pizca de sal y sirve inmediatamente.'] },
+    'batido':        { nombre:'Batido de plátano y avena', emoji:'🍌', tiempo:'5 min', dificultad:'Fácil', raciones:'1', ingredientes:['1 plátano maduro','3 cucharadas de avena','200 ml de leche o bebida vegetal','1 cucharadita de miel (opcional)'], pasos:['Pela el plátano y trocéalo.','Pon todos los ingredientes en el vaso de la batidora.','Tritura 30 segundos hasta obtener textura suave.','Sirve frío, con hielo si lo prefieres.'] },
+    'pollo':         { nombre:'Pollo al horno con limón', emoji:'🍗', tiempo:'45 min', dificultad:'Fácil', raciones:'4', ingredientes:['4 contramuslos de pollo','1 limón','3 dientes de ajo','2 cucharadas de aceite de oliva','Sal, pimienta y romero'], pasos:['Precalienta el horno a 200°C.','Mezcla aceite, ajo picado, zumo de limón, sal, pimienta y romero.','Unta el pollo y colócalo en una bandeja.','Hornea 40 minutos, dando la vuelta a mitad de cocción.'] },
+    'lentejas':      { nombre:'Lentejas con verduras', emoji:'🥘', tiempo:'40 min', dificultad:'Fácil', raciones:'4', ingredientes:['300 g de lentejas pardinas','1 zanahoria','1 puerro','1 tomate','1 hoja de laurel','Sal y aceite de oliva'], pasos:['Lava las lentejas y ponlas en una olla con agua fría.','Añade zanahoria, puerro, tomate y laurel troceados.','Cuece 30 minutos a fuego medio.','Sazona con sal y un chorrito de aceite antes de servir.'] },
+    'pasta':         { nombre:'Pasta al pesto casero', emoji:'🍝', tiempo:'25 min', dificultad:'Fácil', raciones:'2', ingredientes:['200 g de espaguetis','Un manojo de albahaca fresca','30 g de piñones','30 g de parmesano rallado','1 diente de ajo','4 cucharadas de aceite de oliva'], pasos:['Cuece la pasta en agua con sal.','Tritura albahaca, piñones, ajo y parmesano.','Añade el aceite poco a poco hasta obtener una salsa cremosa.','Mezcla con la pasta escurrida y sirve.'] },
+    'tortilla':      { nombre:'Tortilla española', emoji:'🍳', tiempo:'30 min', dificultad:'Media', raciones:'4', ingredientes:['4 huevos','3 patatas medianas','1 cebolla (opcional)','Aceite de oliva','Sal'], pasos:['Pela y corta las patatas en láminas finas.','Fríe las patatas y cebolla en aceite a fuego medio 15 min.','Bate los huevos con sal, escurre las patatas y mézclalas.','Cuaja en sartén antiadherente, dando la vuelta con un plato.'] },
+    'merluza':       { nombre:'Merluza a la plancha', emoji:'🐟', tiempo:'15 min', dificultad:'Fácil', raciones:'2', ingredientes:['2 filetes de merluza','Aceite de oliva','Sal y pimienta','1 limón','Perejil picado'], pasos:['Seca los filetes y salpimienta.','Calienta la plancha con un hilo de aceite a fuego alto.','Cocina 3 minutos por cada lado sin mover.','Sirve con unas gotas de limón y perejil.'] },
+    'ensalada-med':  { nombre:'Ensalada mediterránea', emoji:'🥗', tiempo:'15 min', dificultad:'Fácil', raciones:'2', ingredientes:['Lechuga variada','1 tomate','1 pepino','Aceitunas negras','Queso feta','Aceite, vinagre y sal'], pasos:['Lava y seca bien la lechuga.','Corta el tomate y el pepino en dados.','Mezcla todos los ingredientes en un bol.','Aliña con aceite, vinagre y sal al gusto.'] },
+    'ensalada-garb': { nombre:'Ensalada de garbanzos y aguacate', emoji:'🥑', tiempo:'10 min', dificultad:'Fácil', raciones:'2', ingredientes:['1 bote de garbanzos cocidos','1 aguacate maduro','1 tomate','Zumo de limón','Sal, comino y aceite de oliva'], pasos:['Escurre y enjuaga los garbanzos.','Corta el aguacate y el tomate en dados.','Mezcla y aliña con zumo de limón, aceite, sal y comino.','Sirve inmediatamente.'] },
+    'flan':          { nombre:'Flan de huevo clásico', emoji:'🍮', tiempo:'50 min', dificultad:'Media', raciones:'6', ingredientes:['4 huevos','500 ml de leche entera','100 g de azúcar','Caramelo: 80 g azúcar + 2 cucharadas de agua'], pasos:['Haz el caramelo: calienta azúcar con agua hasta que se dore. Vierte en el molde.','Bate huevos con azúcar, añade la leche tibia y mezcla.','Vierte sobre el caramelo y hornea al baño maría a 170°C, 40 minutos.','Deja enfriar completamente antes de desmoldar.'] },
+  };
+
+  function abrirReceta(id) {
+    const r = RECETAS[id];
+    if (!r) return;
+    document.getElementById('det-emoji').textContent = r.emoji;
+    document.getElementById('det-nombre').textContent = r.nombre;
+    document.getElementById('det-meta').textContent = r.tiempo + ' · ' + r.dificultad + ' · ' + r.raciones + ' raciones';
+    document.getElementById('det-ingredientes').innerHTML = r.ingredientes.map(i => `<li>${i}</li>`).join('');
+    document.getElementById('det-pasos').innerHTML = r.pasos.map((p,n) => `<li><b>${n+1}.</b> ${p}</li>`).join('');
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-detalle').classList.add('activa');
+  }
+
+  function cerrarDetalle() {
+    document.getElementById('pantalla-detalle').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
+  // ── NAVEGACIÓN ────────────────────────────────────────────────────────
+  renderCalendario();
+
+  function abrirYoti() {
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-yoti').classList.add('activa');
+  }
+
+  function cerrarYoti() {
+    document.getElementById('pantalla-yoti').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
+  // ── PROTOCOLO DE PÁNICO ───────────────────────────────────────────────
+  // 1 pulsación  → calendario neutro (camuflaje)
+  // 5 pulsaciones en menos de 3 segundos → emergencia + WhatsApp a María
+
+  let contadorSalida = 0;
+  let timerSalida = null;
+  const CONTACTO_MARIA = '34600000000'; // sustituir por número real de María
+  const UMBRAL_PANICO = 5;
+  const VENTANA_MS = 3000;
+
+  function activarSalidaRapida() {
+    contadorSalida++;
+
+    // Reiniciar contador tras 3 segundos de inactividad
+    clearTimeout(timerSalida);
+    timerSalida = setTimeout(() => { contadorSalida = 0; }, VENTANA_MS);
+
+    if (contadorSalida >= UMBRAL_PANICO) {
+      // PROTOCOLO DE PÁNICO — 5 pulsaciones
+      contadorSalida = 0;
+      clearTimeout(timerSalida);
+      activarProtocoloPanico();
+    } else {
+      // Salida rápida normal — 1 pulsación
+      document.getElementById('app-recetas').style.display = 'none';
+      document.getElementById('pantalla-yoti').classList.remove('activa');
+      document.getElementById('pantalla-detalle').classList.remove('activa');
+      document.getElementById('pantalla-neutra').classList.add('activa');
+    }
+  }
+
+  function activarProtocoloPanico() {
+    // Ocultar todo
+    document.getElementById('app-recetas').style.display = 'none';
+    document.getElementById('pantalla-yoti').classList.remove('activa');
+    document.getElementById('pantalla-detalle').classList.remove('activa');
+    document.getElementById('pantalla-neutra').classList.remove('activa');
+
+    // Abrir WhatsApp con mensaje a María
+    const mensaje = encodeURIComponent('Necesito ayuda. Estoy en peligro.');
+    window.open(`https://wa.me/${CONTACTO_MARIA}?text=${mensaje}`, '_blank');
+
+    // Mostrar pantalla de emergencia mínima con 112
+    const emerg = document.createElement('div');
+    emerg.id = 'panico-overlay';
+    emerg.style.cssText = `
+      position:fixed;inset:0;background:#1a0000;z-index:9999;
+      display:flex;flex-direction:column;align-items:center;
+      justify-content:center;gap:16px;padding:32px;
+    `;
+    emerg.innerHTML = `
+      <div style="font-family:Lato,sans-serif;font-size:12px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;">Alerta enviada a tu contacto de confianza</div>
+      <a href="tel:112" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:280px;padding:20px;background:#C62828;color:#fff;font-family:Lato,sans-serif;font-size:24px;font-weight:900;border-radius:14px;text-decoration:none;box-shadow:0 6px 24px rgba(198,40,40,0.5);">📞 Llamar al 112</a>
+      <button onclick="document.getElementById('panico-overlay').remove();document.getElementById('app-recetas').style.display='block';" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.4);font-family:Lato,sans-serif;font-size:12px;padding:8px 20px;border-radius:20px;cursor:pointer;margin-top:8px;">Volver</button>
+    `;
+    document.body.appendChild(emerg);
+  }
+
+  function volverDesdeNeutra() {
+    document.getElementById('pantalla-neutra').classList.remove('activa');
+    document.getElementById('app-recetas').style.display = 'block';
+  }
+
+  function enviarRespuesta(btn, texto) {
+    agregarBurbuja(texto, 'usuaria');
+    document.getElementById('respuestas-rapidas').style.display = 'none';
+    setTimeout(() => {
+      responderYoti(texto);
+    }, 600);
+  }
+
+  function enviarMensaje() {
+    const input = document.getElementById('chat-input');
+    const texto = input.value.trim();
+    if (!texto) return;
+    agregarBurbuja(texto, 'usuaria');
+    input.value = '';
+    setTimeout(() => responderYoti(texto), 600);
+  }
+
+  function manejarEnter(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviarMensaje();
+    }
+  }
+
+  function agregarBurbuja(texto, tipo) {
+    const chat = document.getElementById('chat-area');
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja burbuja-' + tipo;
+    burbuja.textContent = texto;
+    chat.appendChild(burbuja);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function responderYoti(input) {
+    const txt = input.toLowerCase();
+    let respuesta = '';
+
+    // Orden importante: primero los más específicos
+    if (txt.includes('miedo')) {
+      respuesta = 'Gracias por contarme esto. El miedo es una señal importante y merece atención.\n\nSi ahora mismo estás en peligro, lo más importante es que llames al 112.\n\nSi tienes un momento, puedes contarme un poco más sobre lo que está pasando.';
+    } else if (txt.includes('preparar') || txt.includes('salir')) {
+      respuesta = 'Querer prepararte es un paso muy valiente.\n\nHay cosas que puedes ir organizando poco a poco: documentos importantes, un contacto de confianza, un lugar al que puedas ir.\n\nEl 016 puede orientarte de forma confidencial. No aparece en la factura del teléfono.';
+    } else if (txt.includes('normal') || txt.includes('no sé') || txt.includes('no se')) {
+      respuesta = 'Lo que sientes importa, aunque todavía no tengas palabras para explicarlo.\n\nA veces las situaciones difíciles se van instalando poco a poco y es difícil reconocerlas desde dentro.\n\n¿Hay algo concreto que te preocupa o que te está haciendo sentir mal?';
+    } else {
+      respuesta = 'Te escucho. Gracias por compartir esto conmigo.\n\nSi en algún momento necesitas hablar con alguien especializada, el 016 está disponible de forma gratuita y confidencial. Puedes llamar cuando te sientas segura para hacerlo.';
+    }
+
+    // Añadir aviso demo al final
+    agregarBurbuja(respuesta, 'yoti');
+    setTimeout(() => {
+      const chat = document.getElementById('chat-area');
+      const aviso = document.createElement('div');
+      aviso.style.cssText = 'font-size:10px;color:#aaa;text-align:center;padding:4px 0 8px;font-family:Lato,sans-serif;font-style:italic;';
+      aviso.textContent = '— Respuesta de demo. La versión real usa IA adaptativa. —';
+      chat.appendChild(aviso);
+      chat.scrollTop = chat.scrollHeight;
+    }, 100);
+  }
+</script>
+
+<!-- AUTORÍA -->
+<footer style="
+  background: var(--burdeos);
+  padding: 12px 20px;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+">
+  Yoti Refugio · Plataforma Yoti / YoTeCreo<br>
+  Luz C. Wong Naranjo · Concepto y Desarrollo · Especialista en Marketing Digital · IA aplicada a negocios<br>
+  PI Ref. 49/189530.9/26 · Registro Comunidad de Madrid · 2026
+</footer>
+</body>
+</html>
